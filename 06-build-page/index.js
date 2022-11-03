@@ -2,18 +2,10 @@ const path = require('path');
 const fs = require('fs')
 const projDist = path.join(__dirname, 'project-dist');
 async function createPage(pathDist) {
-    try { 
-        await fs.promises.access(pathDist); 
-        createIndex(path.join(__dirname, 'template.html'), path.join(__dirname, 'components'), pathDist);
-        createCss(path.join(__dirname, 'styles'), pathDist);
-        copyDir(path.join(__dirname, 'assets'), path.join(pathDist, 'assets'));
-    }
-    catch {
-        await fs.promises.mkdir(pathDist);
-        createIndex(path.join(__dirname, 'template.html'), path.join(__dirname, 'components'), pathDist);
-        createCss(path.join(__dirname, 'styles'), pathDist);
-        copyDir(path.join(__dirname, 'assets'), path.join(pathDist, 'assets'));
-    }
+    await fs.promises.mkdir(pathDist, { recursive: true });
+    createIndex(path.join(__dirname, 'template.html'), path.join(__dirname, 'components'), pathDist);
+    createCss(path.join(__dirname, 'styles'), pathDist);
+    copyDir(path.join(__dirname, 'assets'), path.join(pathDist, 'assets'));
 }
 async function createIndex(template, components, target) {
     let index = fs.createWriteStream(path.join(target, 'index.html'));
